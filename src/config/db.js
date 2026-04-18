@@ -2,12 +2,18 @@ import mongoose from "mongoose";
 
 const connectDB = async () => {
   try {
+    const uri = process.env.MONGO_URI;
 
-    await mongoose.connect(process.env.MONGO_URI);
+    if (!uri) {
+      console.error("MONGO_URI is not set. Please create a .env file or set MONGO_URI.");
+      process.exit(1);
+    }
+
+    await mongoose.connect(uri, {});
 
     console.log("MongoDB connected");
   } catch (error) {
-    console.error("Database connection failed");
+    console.error("Database connection failed:", error.message || error);
     process.exit(1);
   }
 };
